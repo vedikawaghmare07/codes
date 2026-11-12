@@ -1,0 +1,34 @@
+#include <iostream>
+#include <stack>
+using namespace std;
+
+int main()
+{
+    int decimal;
+    stack<int> s;
+
+    cout << "Enter a decimal number: ";
+    cin >> decimal;
+
+    int n = decimal;
+
+    // Convert decimal to binary
+    while (n > 0)
+    {
+        s.push(n % 2);
+        n = n / 2;
+    }
+
+    cout << "Equivalent binary number: ";
+
+    // Display binary number using stack
+    while (!s.empty())
+    {
+        cout << s.top();
+        s.pop();
+    }
+
+    cout << endl;
+
+    return 0;
+}
