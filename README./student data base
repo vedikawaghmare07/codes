@@ -1,0 +1,170 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+struct Student
+{
+    int rollNo;
+    string name;
+    float marks;
+};
+
+int main()
+{
+    Student s[100], temp;
+    int n = 0, choice, roll, i, j, pos;
+    
+    do
+    {
+        cout << "\n--- STUDENT DATABASE MANAGEMENT ---";
+        cout << "\n1. Add Student";
+        cout << "\n2. Display Students";
+        cout << "\n3. Search Student";
+        cout << "\n4. Sort Students";
+        cout << "\n5. Modify Student";
+        cout << "\n6. Append Student";
+        cout << "\n7. Exit";
+        
+        cout << "\nEnter your choice: ";
+        cin >> choice;
+
+        switch(choice)
+        {
+            case 1:
+                cout << "\nEnter number of students: ";
+                cin >> n;
+
+                for(i = 0; i < n; i++)
+                {
+                    cout << "\nEnter Roll Number: ";
+                    cin >> s[i].rollNo;
+
+                    cout << "Enter Name: ";
+                    cin >> s[i].name;
+
+                    cout << "Enter Marks: ";
+                    cin >> s[i].marks;
+                }
+                break;
+
+            case 2:
+                cout << "\nRoll No\tName\tMarks\n";
+
+                for(i = 0; i < n; i++)
+                {
+                    cout << s[i].rollNo << "\t"
+                         << s[i].name << "\t"
+                         << s[i].marks << endl;
+                }
+                break;
+
+            case 3:
+                cout << "\nEnter Roll Number to search: ";
+                cin >> roll;
+
+                pos = -1;
+
+                for(i = 0; i < n; i++)
+                {
+                    if(s[i].rollNo == roll)
+                    {
+                        pos = i;
+                        break;
+                    }
+                }
+
+                if(pos != -1)
+                {
+                    cout << "\nStudent Found!";
+                    cout << "\nRoll No: " << s[pos].rollNo;
+                    cout << "\nName: " << s[pos].name;
+                    cout << "\nMarks: " << s[pos].marks;
+                }
+                else
+                {
+                    cout << "\nStudent Not Found!";
+                }
+                break;
+
+            case 4:
+                for(i = 0; i < n - 1; i++)
+                {
+                    for(j = 0; j < n - i - 1; j++)
+                    {
+                        if(s[j].rollNo > s[j+1].rollNo)
+                        {
+                            temp = s[j];
+                            s[j] = s[j+1];
+                            s[j+1] = temp;
+                        }
+                    }
+                }
+
+                cout << "\nStudents Sorted Successfully!";
+                break;
+
+            case 5:
+                cout << "\nEnter Roll Number to modify: ";
+                cin >> roll;
+
+                pos = -1;
+
+                for(i = 0; i < n; i++)
+                {
+                    if(s[i].rollNo == roll)
+                    {
+                        pos = i;
+                        break;
+                    }
+                }
+
+                if(pos != -1)
+                {
+                    cout << "\nEnter New Name: ";
+                    cin >> s[pos].name;
+
+                    cout << "Enter New Marks: ";
+                    cin >> s[pos].marks;
+
+                    cout << "\nRecord Modified Successfully!";
+                }
+                else
+                {
+                    cout << "\nStudent Not Found!";
+                }
+                break;
+
+            case 6:
+                if(n < 100)
+                {
+                    cout << "\nEnter Roll Number: ";
+                    cin >> s[n].rollNo;
+
+                    cout << "Enter Name: ";
+                    cin >> s[n].name;
+
+                    cout << "Enter Marks: ";
+                    cin >> s[n].marks;
+
+                    n++;
+
+                    cout << "\nStudent Appended Successfully!";
+                }
+                else
+                {
+                    cout << "\nDatabase is Full!";
+                }
+                break;
+
+            case 7:
+                cout << "\nExiting Program...";
+                break;
+
+            default:
+                cout << "\nInvalid Choice!";
+        }
+
+    } while(choice != 7);
+
+    return 0;
+}
