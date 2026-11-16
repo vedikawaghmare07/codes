@@ -1,170 +1,160 @@
 #include <iostream>
+#include <vector>
+#include <algorithm>
 #include <string>
 using namespace std;
 
-struct Student
-{
+// Student Class
+class Student {
+public:
     int rollNo;
     string name;
     float marks;
+
+    Student(int r, string n, float m) {
+        rollNo = r;
+        name = n;
+        marks = m;
+    }
 };
 
-int main()
-{
-    Student s[100], temp;
-    int n = 0, choice, roll, i, j, pos;
-    
-    do
-    {
-        cout << "\n--- STUDENT DATABASE MANAGEMENT ---";
-        cout << "\n1. Add Student";
-        cout << "\n2. Display Students";
-        cout << "\n3. Search Student";
-        cout << "\n4. Sort Students";
-        cout << "\n5. Modify Student";
-        cout << "\n6. Append Student";
-        cout << "\n7. Exit";
-        
-        cout << "\nEnter your choice: ";
+// Template Class
+template <class T>
+class StudentManager {
+private:
+    vector<T> students;
+
+public:
+
+    // Insert Student
+    void insertStudent(T s) {
+        students.push_back(s);
+        cout << "\nStudent Record Inserted Successfully.\n";
+    }
+
+    // Display Students
+    void displayStudents() {
+        if (students.empty()) {
+            cout << "\nNo Student Record Found.\n";
+            return;
+        }
+
+        cout << "\n-----------------------------\n";
+        cout << "Roll No\tName\t\tMarks\n";
+        cout << "-----------------------------\n";
+
+        for (int i = 0; i < students.size(); i++) {
+            cout << students[i].rollNo << "\t";
+            cout << students[i].name << "\t\t";
+            cout << students[i].marks << endl;
+        }
+    }
+
+    // Search Student
+    void searchStudent(int roll) {
+        for (int i = 0; i < students.size(); i++) {
+            if (students[i].rollNo == roll) {
+                cout << "\nStudent Found\n";
+                cout << "Roll No: " << students[i].rollNo << endl;
+                cout << "Name: " << students[i].name << endl;
+                cout << "Marks: " << students[i].marks << endl;
+                return;
+            }
+        }
+
+        cout << "\nStudent Not Found.\n";
+    }
+
+    // Delete Student
+    void deleteStudent(int roll) {
+        typename vector<T>::iterator it;
+
+        for (it = students.begin(); it != students.end(); it++) {
+            if (it->rollNo == roll) {
+                students.erase(it);
+                cout << "\nStudent Record Deleted Successfully.\n";
+                return;
+            }
+        }
+
+        cout << "\nStudent Not Found.\n";
+    }
+
+    // Sort Students
+    void sortStudents() {
+        sort(students.begin(), students.end(),
+            [](T a, T b) {
+                return a.rollNo < b.rollNo;
+            });
+
+        cout << "\nStudent Records Sorted Successfully.\n";
+    }
+};
+
+// Main Function
+int main() {
+    StudentManager<Student> manager;
+
+    int choice, roll;
+    string name;
+    float marks;
+
+    do {
+        cout << "\n------- Student Management System -------\n";
+        cout << "1. Insert Student\n";
+        cout << "2. Delete Student\n";
+        cout << "3. Search Student\n";
+        cout << "4. Sort Student\n";
+        cout << "5. Display Student\n";
+        cout << "6. Exit\n";
+
+        cout << "Enter Choice: ";
         cin >> choice;
 
-        switch(choice)
-        {
+        switch (choice) {
+
             case 1:
-                cout << "\nEnter number of students: ";
-                cin >> n;
+                cout << "Enter Roll No: ";
+                cin >> roll;
 
-                for(i = 0; i < n; i++)
-                {
-                    cout << "\nEnter Roll Number: ";
-                    cin >> s[i].rollNo;
+                cout << "Enter Name: ";
+                cin >> name;
 
-                    cout << "Enter Name: ";
-                    cin >> s[i].name;
+                cout << "Enter Marks: ";
+                cin >> marks;
 
-                    cout << "Enter Marks: ";
-                    cin >> s[i].marks;
-                }
+                manager.insertStudent(Student(roll, name, marks));
                 break;
 
             case 2:
-                cout << "\nRoll No\tName\tMarks\n";
-
-                for(i = 0; i < n; i++)
-                {
-                    cout << s[i].rollNo << "\t"
-                         << s[i].name << "\t"
-                         << s[i].marks << endl;
-                }
+                cout << "Enter Roll No to Delete: ";
+                cin >> roll;
+                manager.deleteStudent(roll);
                 break;
 
             case 3:
-                cout << "\nEnter Roll Number to search: ";
+                cout << "Enter Roll No to Search: ";
                 cin >> roll;
-
-                pos = -1;
-
-                for(i = 0; i < n; i++)
-                {
-                    if(s[i].rollNo == roll)
-                    {
-                        pos = i;
-                        break;
-                    }
-                }
-
-                if(pos != -1)
-                {
-                    cout << "\nStudent Found!";
-                    cout << "\nRoll No: " << s[pos].rollNo;
-                    cout << "\nName: " << s[pos].name;
-                    cout << "\nMarks: " << s[pos].marks;
-                }
-                else
-                {
-                    cout << "\nStudent Not Found!";
-                }
+                manager.searchStudent(roll);
                 break;
 
             case 4:
-                for(i = 0; i < n - 1; i++)
-                {
-                    for(j = 0; j < n - i - 1; j++)
-                    {
-                        if(s[j].rollNo > s[j+1].rollNo)
-                        {
-                            temp = s[j];
-                            s[j] = s[j+1];
-                            s[j+1] = temp;
-                        }
-                    }
-                }
-
-                cout << "\nStudents Sorted Successfully!";
+                manager.sortStudents();
                 break;
 
             case 5:
-                cout << "\nEnter Roll Number to modify: ";
-                cin >> roll;
-
-                pos = -1;
-
-                for(i = 0; i < n; i++)
-                {
-                    if(s[i].rollNo == roll)
-                    {
-                        pos = i;
-                        break;
-                    }
-                }
-
-                if(pos != -1)
-                {
-                    cout << "\nEnter New Name: ";
-                    cin >> s[pos].name;
-
-                    cout << "Enter New Marks: ";
-                    cin >> s[pos].marks;
-
-                    cout << "\nRecord Modified Successfully!";
-                }
-                else
-                {
-                    cout << "\nStudent Not Found!";
-                }
+                manager.displayStudents();
                 break;
 
             case 6:
-                if(n < 100)
-                {
-                    cout << "\nEnter Roll Number: ";
-                    cin >> s[n].rollNo;
-
-                    cout << "Enter Name: ";
-                    cin >> s[n].name;
-
-                    cout << "Enter Marks: ";
-                    cin >> s[n].marks;
-
-                    n++;
-
-                    cout << "\nStudent Appended Successfully!";
-                }
-                else
-                {
-                    cout << "\nDatabase is Full!";
-                }
-                break;
-
-            case 7:
-                cout << "\nExiting Program...";
+                cout << "\nProgram Terminated.\n";
                 break;
 
             default:
-                cout << "\nInvalid Choice!";
+                cout << "\nInvalid Choice.\n";
         }
 
-    } while(choice != 7);
+    } while (choice != 6);
 
     return 0;
 }
